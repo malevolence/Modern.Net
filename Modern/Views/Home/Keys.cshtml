@@ -1,0 +1,11 @@
+﻿@model WebPush.VapidDetails
+@{
+    ViewBag.Title = "Vapid Keys";
+}
+
+@if (Model != null) {
+    <p>Public Key (Base64 Encoded): @Model.PublicKey</p>
+    <p>Private Key (Base64 Encoded): @Model.PrivateKey</p>
+} else {
+    <div class="alert alert-danger">No vapid keys found.</div>
+}

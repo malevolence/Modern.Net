@@ -1,0 +1,59 @@
+﻿@model List<Modern.Models.PushSubscription>
+@{
+    ViewBag.Title = "Web Push Notifications";
+}
+
+@if (Model != null && Model.Count > 0) {
+    <table class="table table-striped table-hover" id="tblSubscriptions">
+        <thead>
+            <tr>
+                <th>Actions</th>
+                <th>Id</th>
+                <th>Username</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <td colspan="100%" class="text-center">Placholder for some other functionality</td>
+            </tr>
+        </tfoot>
+        <tbody>
+            @foreach (var sub in Model) {
+            <tr>
+                <td><button type="button" class="btn btn-primary" data-id="@sub.Id">Send Notification</button></td>
+                <td>@sub.Id</td>
+                <td>@sub.Username</td>
+                <td>@sub.CreateDate.ToLocalTime().ToString("g")</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+} else {
+    <div class="alert alert-info">There are no push notification subscriptions in the database.</div>
+}
+
+<p class="text-center"><button type="button" id="btnSubscribe" class="btn btn-primary">Subscribe to Push Notifications</button></p>
+
+@section scripts {
+    <script>
+        $(function() {
+            $('#tblSubscriptions tbody').on('click', 'button', function(e) {
+                e.preventDefault();
+                var id = $(this).data('id');
+                var url = '/home/sendnotification/' + id;
+                console.log(url);
+
+                $.ajax(url, {
+                    method: 'POST',
+                    'Content-Type': 'application/json'
+                }).then(function (res) {
+                    console.log('Completed without errors.');
+                    }, function (err) {
+                        console.log('An error occurred...');
+                        console.error(err);
+                });
+            });
+        });
+    </script>
+}
